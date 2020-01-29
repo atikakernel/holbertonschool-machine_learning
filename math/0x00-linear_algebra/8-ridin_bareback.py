@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+"""file to multiplicate matrices without numpy"""
+
+
 def matrix_shape(matrix):
     """calculates the shape of a matrix"""
     shape = []
