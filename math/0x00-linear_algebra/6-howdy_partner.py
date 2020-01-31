@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Add a function to calculate the element wise sum of a 2D matrix"""
+"""Add a function to concatenate two arrays"""
 
 
 def cat_arrays(arr1, arr2):
-    """calculate element wise sum of a 2D matrix"""
+    """concatenate two arrays"""
     return arr1 + arr2
