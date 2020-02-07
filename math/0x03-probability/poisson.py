@@ -18,7 +18,6 @@ class Poisson:
         else:
             self.lambtha = float(lambtha)
 
-
     def pmf(self, k):
         """PMF at k number of events"""
         e = 2.7182818285

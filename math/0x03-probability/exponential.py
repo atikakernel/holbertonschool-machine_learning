@@ -19,7 +19,6 @@ class Exponential:
             self.lambtha = float(lambtha)
         self.data = data
 
-
     def pdf(self, x):
         """PMF at k number of events"""
         e = 2.7182818285
