@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """calculates the normalization (standardization) constants of a matrix"""
 
-yimport numpy as np
+import numpy as np
 
 
 def normalization_constants(X):
