@@ -10,5 +10,5 @@ def create_RMSProp_op(loss, alpha, beta2, epsilon):
     tensorflow using the RMSProp optimization algorithm
     """
     RMSProp = tf.train.RMSPropOptimizer(alpha, decay=beta2,
-                                      epsilon=epsilon).minimize(loss)
+                                        epsilon=epsilon).minimize(loss)
     return RMSProp
