@@ -3,6 +3,6 @@
 import numpy as np
 
 
-def sensivity(confusion):
+def sensitivity(confusion):
     """creates a confusion matrix:"""
     return np.diagonal(confusion)/np.sum(confusion, axis=1)
