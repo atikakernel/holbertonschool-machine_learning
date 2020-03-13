@@ -5,7 +5,8 @@ import numpy as np
 
 def l2_reg_cost(cost, lambtha, weights, L, m):
     """ calculates the cost of a neural network with L2 regularization: """
+    sum1 = 0
     for i in range(L):
-        k = "W{}".format(i + 1)
-        sum1 = np.linalg.norm(weights[k])
-    return cost + lambtha * sum1 / (2 * m)
+        l2 = np.linalg.norm(weights["W"+str(i + 1)], keepdims=True)
+        sum1 = np.sum(l2) + sum1
+    return cost + (lambtha / (2 * m)) * (sum1)
