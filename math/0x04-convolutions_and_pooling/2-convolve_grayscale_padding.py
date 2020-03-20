@@ -10,8 +10,8 @@ def convolve_grayscale_padding(images, kernel, padding):
     ph = padding[0]
     pw = padding[1]
 
-    output_h = h + (2 * padding_h) - kh + 1
-    output_w = w + (2 * padding_w) - kw + 1
+    output_h = h + (2 * ph) - kh + 1
+    output_w = w + (2 * pw) - kw + 1
     output = np.zeros((m, output_h, output_w))
 
     images_arr = np.arange(0, m)
