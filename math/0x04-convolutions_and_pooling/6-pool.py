@@ -6,10 +6,10 @@ import numpy as np
 def pool(images, kernel_shape, stride, mode='max'):
     """performs a valid convolurion on grayscale image"""
     m, h, w, c = images.shape
-    kh, kw = kernel.shape
+    kh, kw = kernel_shape
 
-    output_h = int(((h - kh + (2 * padding_h)) / stride[0]) + 1)
-    output_w = int(((w - kw + (2 * padding_w)) / stride[1]) + 1)
+    output_h = int(((h - kh + (2 * ph)) / stride[0]) + 1)
+    output_w = int(((w - kw + (2 * pw)) / stride[1]) + 1)
     output = np.zeros((m, output_h, output_w, c))
 
     images_arr = np.arange(0, m)
