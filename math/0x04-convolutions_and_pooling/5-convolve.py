@@ -6,7 +6,7 @@ import numpy as np
 def convolve(images, kernels, padding='same', stride=(1, 1)):
     """performs a valid convolurion on grayscale image"""
     m, h, w, c = images.shape
-    kh, kw, kc, nc = kernel.shape
+    kh, kw, kc, nc = kernels.shape
     if isinstance(padding, tuple):
         ph = padding[0]
         pw = padding[1]
@@ -15,8 +15,8 @@ def convolve(images, kernels, padding='same', stride=(1, 1)):
     else:
         ph, pw = 0, 0
 
-    output_h = int(((h - kh + (2 * padding_h)) / stride[0]) + 1)
-    output_w = int(((w - kw + (2 * padding_w)) / stride[1]) + 1)
+    output_h = int(((h - kh + (2 * ph)) / stride[0]) + 1)
+    output_w = int(((w - kw + (2 * pw)) / stride[1]) + 1)
     output = np.zeros((m, output_h, output_w, nc))
 
     images_arr = np.arange(0, m)
