@@ -6,18 +6,17 @@ class Exponential:
     """Poisson distribution stats class"""
     def __init__(self, data=None, lambtha=1.):
         """Initialize poisson distribution stats"""
-        if data:
+        if data is None:
             if lambtha <= 0:
-                raise ValueError("lambtha must be a positive value")
-            elif not isinstance(data, list):
-                raise TypeError('data must be a list')
-            elif len(data) < 2:
-                raise ValueError("data must contain multiple values")
-            else:
-                self.lambtha = float(len(data) / sum(data))
-        else:
+                raise ValueError('lambtha must be a positive value')
             self.lambtha = float(lambtha)
-        self.data = data
+
+        else:
+            if type(data) != list:
+                raise TypeError('data must be a list')
+            if len(data) < 2:
+                raise ValueError('data must contain multiple values')
+            self.lambtha = 1 / (sum(data) / len(data))
 
     def pdf(self, x):
         """PMF at k number of events"""
