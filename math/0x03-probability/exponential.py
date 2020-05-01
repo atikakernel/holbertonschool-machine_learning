@@ -24,7 +24,7 @@ class Exponential:
         x = int(x)
         if x < 0:
             return 0
-        return self.lambtha * pow(e, -1 * self.lambtha * x)
+        return self.lambtha * e**(-self.lambtha * x)
 
     def cdf(self, x):
         """CDF at k number of events"""
