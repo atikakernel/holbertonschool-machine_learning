@@ -16,7 +16,7 @@ class Neuron:
         self.W = np.random.normal(0, 1, (1, nx))
         self.b = 0
         self.A = 0
-        self.__W = np.random.normal(0, 1, (1, nx))
+        self.__W = np.random.randn(nx).reshape(1, nx)
         self.__b = 0
         self.__A = 0
 
