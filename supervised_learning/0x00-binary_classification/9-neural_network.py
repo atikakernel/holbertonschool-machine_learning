@@ -26,7 +26,7 @@ class NeuralNetwork():
         self.A2 = 0
 
         @property
-            def W1(self):
+        def W1(self):
                 """property to retrieve W1"""
                 return self.__W1
 
