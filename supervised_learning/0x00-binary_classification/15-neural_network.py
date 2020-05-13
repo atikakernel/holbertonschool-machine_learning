@@ -26,7 +26,7 @@ class NeuralNetwork():
         self.A2 = 0
 
         @property
-            def W1(self):
+        def W1(self):
                 """property to retrieve W1"""
                 return self.__W1
 
@@ -92,3 +92,40 @@ class NeuralNetwork():
             self.__b2 -= alpha * db2
             self.__W1 -= alpha * dW1
             self.__b1 -= alpha * db1
+
+        def train(self, X, Y, iterations=5000, alpha=0.05):
+            """ optimized and cost of training"""
+
+            if type(iterations) is not int:
+                raise TypeError("iterations must be an integer")
+            if iterations < 0:
+                raise ValueError("iterations must be a positive integer")
+            if type(alpha) is not float:
+                raise TypeError("alpha must be a float")
+            if alpha < 0:
+                raise ValueError("alpha must be positive")
+
+            steps = 0
+            c_ax = np.zeros(iterations + 1)
+
+            temp_cost = []
+            temp_iterations = []
+            for i in range(iterations + 1):
+                self.forward_prop(X)
+                cost = self.cost(Y, self.__A2)
+                if i % step == 0 or i == iterations:
+                    temp_cost.append(cost)
+                    temp_iterations.append(i)
+                    if verbose is True:
+                        print("Cost after {} iterations: {}".format(i, cost))
+                if i < iterations:
+                    self.gradient_descent(X, Y, self.__A1, self.__A2, alpha)
+
+
+            if graph is True:
+                plt.title("Training Cost")
+                plt.xlabel("iteration")
+                plt.ylabel("cost")
+                plt.plot(temp_iterations, temp_cost)
+                plt.show()
+            return self.evaluate(X, Y)

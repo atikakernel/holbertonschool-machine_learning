@@ -26,7 +26,7 @@ class NeuralNetwork():
         self.A2 = 0
 
         @property
-            def W1(self):
+        def W1(self):
                 """property to retrieve W1"""
                 return self.__W1
 
@@ -75,37 +75,3 @@ class NeuralNetwork():
             A2 = np.where(self.__A2 >= 0.5, 1, 0)
             cost = self.cost(Y, self.__A2)
             return A2, cost
-
-        def gradient_descent(self, X, Y, A1, A2, alpha=0.05):
-            """ gradient descent bias + adjusted weights"""
-
-            m = Y.shape[1]
-            dz2 = A2 - Y
-            dW2 = np.matmul(A1, dz2.T) / m
-
-            db2 = np.sum(dz2, axis=1, keepdims=True) / m
-            dz1 = np.matmul(self.__W2.T, dz2) * (A1 * (1 - A1))
-            dW1 = np.matmul(dz1, X.T) / m
-            db1 = np.sum(dz1, axis=1, keepdims=True) / m
-
-            self.__W2 -= (alpha * dW2).T
-            self.__b2 -= alpha * db2
-            self.__W1 -= alpha * dW1
-            self.__b1 -= alpha * db1
-
-        def train(self, X, Y, iterations=5000, alpha=0.05):
-            """ optimized and cost of training"""
-
-            if type(iterations) is not int:
-                raise TypeError("iterations must be an integer")
-            if iterations < 0:
-                raise ValueError("iterations must be a positive integer")
-            if type(alpha) is not float:
-                raise TypeError("alpha must be a float")
-            if alpha < 0:
-                raise ValueError("alpha must be positive")
-
-            for i in range(iterations):
-                self.forward_prop(X)
-                self.gradient_descent(X, Y, self.__A1, self.__A2, alpha)
-                return self.evaluate(X, Y)
