@@ -6,30 +6,40 @@ import tensorflow.keras as K
 
 def projection_block(A_prev, filters, s=2):
     """the activated output of the projection block"""
-    init = K.initializers.he_normal()
-    activation = 'relu'
     F11, F3, F12 = filters
+    lay_init = K.initializers.he_normal()
 
-    conv1 = K.layers.Conv2D(filters=F11, kernel_size=1, strides=s,
-                            padding='same',
-                            kernel_initializer=init)(A_prev)
+    conv_layF11 = K.layers.Conv2D(filters=F11, kernel_size=(1, 1),
+                                  padding='same', strides=(s, s),
+                                  kernel_initializer=lay_init)
+    convF11 = conv_layF11(A_prev)
 
-    batchc1 = K.layers.BatchNormalization(axis=3)(conv1)
-    relu1 = K.layers.Activation('relu')(batchc1)
-    conv2 = K.layers.Conv2D(filters=F3, kernel_size=3, padding='same',
-                            kernel_initializer=init)(relu1)
-    batchc2 = K.layers.BatchNormalization(axis=3)(conv2)
-    relu2 = K.layers.Activation('relu')(batchc2)
-    conv3 = K.layers.Conv2D(filters=F12, kernel_size=1, padding='same',
-                            kernel_initializer=init)(relu2)
+    norm_lay1 = K.layers.BatchNormalization(axis=3)
+    norm1 = norm_lay1(convF11)
 
-    conv1_proj = K.layers.Conv2D(filters=F12, kernel_size=1, strides=s,
+    X1 = K.layers.Activation('relu')(norm1)
+    conv_layF3 = K.layers.Conv2D(filters=F3, kernel_size=(3, 3),
                                  padding='same',
-                                 kernel_initializer=init)(A_prev)
+                                 kernel_initializer=lay_init)
+    convF3 = conv_layF3(X1)
 
-    batch3 = K.layers.BatchNormalization(axis=3)(conv3)
+    norm_lay2 = K.layers.BatchNormalization(axis=3)
+    norm2 = norm_lay2(convF3)
 
-    batch4 = K.layers.BatchNormalization(axis=3)(conv1_proj)
-    addit = K.layers.Add()([batch3, batch4])
-    finelu = K.layers.Activation('relu')(addit)
-    return finlu
+    X2 = K.layers.Activation('relu')(norm2)
+    conv_layF12 = K.layers.Conv2D(filters=F12, kernel_size=(1, 1),
+                                  padding='same',
+                                  kernel_initializer=lay_init)
+    convF12 = conv_layF12(X2)
+
+    norm_lay3 = K.layers.BatchNormalization(axis=3)
+    norm3 = norm_lay3(convF12)
+    shortcut_lay = K.layers.Conv2D(filters=F12, kernel_size=(1, 1),
+                                   padding='same', strides=(s, s),
+                                   kernel_initializer=lay_init)
+    shortcut = shortcut_lay(A_prev)
+    norm_layshort = K.layers.BatchNormalization(axis=3)
+    norm_short = norm_layshort(shortcut)
+    result = K.layers.Add()([norm3, norm_short])
+    X3 = K.layers.Activation('relu')(result)
+    return X3
