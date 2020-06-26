@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
-"""Bloc"""
+"""creating a transition layer"""
 
 import tensorflow.keras as K
 
 
 def transition_layer(X, nb_filters, compression):
-    """
-         The output of the transition layer and the number of filters within
-         the output, respectively.
-    """
+    """The output of the transition"""
     init = K.initializers.he_normal()
     batch_normalization_ = K.layers.BatchNormalization(
         axis=-1
