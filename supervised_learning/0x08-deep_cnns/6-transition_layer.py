@@ -31,6 +31,6 @@ def transition_layer(X, nb_filters, compression):
         padding='valid'
     )
     average_pooling2d = average_pooling2d_(conv2d)
-    fil *= compression
-    fil = int(fil)
-    return average_pooling2d, fil
+    nb_filters *= compression
+    nb_filters = int(nb_filters)
+    return average_pooling2d, nb_filters
