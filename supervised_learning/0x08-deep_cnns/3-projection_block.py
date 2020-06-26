@@ -30,6 +30,6 @@ def projection_block(A_prev, filters, s=2):
     batch3 = K.layers.BatchNormalization(axis=3)(conv3)
 
     batch4 = K.layers.BatchNormalization(axis=3)(conv1_proj)
-    addit= K.layers.Add()([batch3, batch4])
+    addit = K.layers.Add()([batch3, batch4])
     finelu = K.layers.Activation('relu')(addit)
     return finlu
