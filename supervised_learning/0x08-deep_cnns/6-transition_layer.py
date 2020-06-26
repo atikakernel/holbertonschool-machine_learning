@@ -9,17 +9,28 @@ def transition_layer(X, nb_filters, compression):
          The output of the transition layer and the number of filters within
          the output, respectively.
     """
-    filters = int(filters * compression)
-
-    x = K.layers.BatchNormalization()(X)
-    x = K.layers.Activation('relu')(x)
-    x = K.layers.Conv2D(filters=filters,
-                        kernel_size=1,
-                        padding='same',
-                        kernel_initializer='he_normal')(x)
-
-    x = K.layers.AvgPool2D(pool_size=(2, 2),
-                           strides=(2, 2),
-                           padding='valid')(x)
-
-    return x, filters
+    init = K.initializers.he_normal()
+    batch_normalization_ = K.layers.BatchNormalization(
+        axis=-1
+    )
+    batch_normalization = batch_normalization_(X)
+    activation_ = K.layers.Activation(
+        activation='relu'
+    )
+    activation = activation_(batch_normalization)
+    conv2d_ = K.layers.Conv2D(
+        filters=int(nb_filters * compression),
+        kernel_size=[1, 1],
+        kernel_initializer=init,
+        padding='same',
+    )
+    conv2d = conv2d_(activation)
+    average_pooling2d_ = K.layers.AveragePooling2D(
+        pool_size=(2, 2),
+        strides=(2, 2),
+        padding='valid'
+    )
+    average_pooling2d = average_pooling2d_(conv2d)
+    fil *= compression
+    fil = int(fil)
+    return average_pooling2d, fil
