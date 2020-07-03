@@ -131,19 +131,13 @@ class Yolo():
         return images, paths
 
     def preprocess_images(self, images):
-        """
-        Resize and rescale images.
-        """
-        image_sizes = np.zeros((len(images), 2))
-        target_height = self.model.input.shape[1].value
-        target_width = self.model.input.shape[2].value
-        proc_images = np.zeros((len(images), target_height, target_width, 3))
-        for idx, image in enumerate(images):
-            image_sizes[idx][0] = image.shape[0]
-            image_sizes[idx][1] = image.shape[1]
-            proc_images[idx] = cv2.resize(image,
-                                          (target_height, target_width),
-                                          interpolation=cv2.INTER_CUBIC)
-            proc_images[idx] -= proc_images[idx].min()
-            proc_images[idx] /= proc_images[idx].max()
-        return proc_images, image_sizes.astype(int)
+        """ Preprocess images to posterior use with darknet"""
+        resized = []
+        dims = self.model.input_shape[1:3]
+        for img in images:
+            resized.append(cv2.resize(img, dims,
+                                      interpolation=cv2.INTER_CUBIC) / 255)
+        shapes = []
+        for img in images:
+            shapes.append(img.shape[:2])
+        return np.array(resized), np.array(shapes)
