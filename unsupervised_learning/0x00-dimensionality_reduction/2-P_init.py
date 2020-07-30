@@ -13,12 +13,12 @@ def P_init(X, perplexity):
     betas: a numpy.ndarray of shape (n, 1) initialized to
     all 1’s that will contain all of the beta values
     """
-    n, d = X.shape
-    x_square = np.sum(np.square(X), axis=1)
-    y_square = np.sum(np.square(X), axis=1)
-    xy = np.dot(X, X.T)
-    D = np.add(np.add((-2 * xy), x_square).T, y_square)
-    P = np.zeros((n, n))
+    (n, d) = X.shape
+    sum_X = np.sum(np.square(X), 1)
+    D = np.add(np.add(-2 * np.dot(X, X.T), sum_X).T, sum_X)
+    np.fill_diagonal(D, 0)
     betas = np.ones((n, 1))
+    P = np.zeros((n, n))
     H = np.log2(perplexity)
-    return (D, P, betas, H)
+
+    return D, P, betas, H
