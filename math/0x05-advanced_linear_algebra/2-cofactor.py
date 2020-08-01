@@ -4,45 +4,56 @@ Determinant
 """
 
 
-def minor_m(m, row, col):
-    """
-    Returns:
-        the matrix with the omited row, column.
-    """
-    return [[m[i][j] for j in range(len(m[i])) if j != col]
-            for i in range(len(m)) if i != row]
-
-
 def determinant(matrix):
     """
-    Returns:
-        the determinant.
+    Calculates the determinant of a matrix
+    :param matrix: list of lists whose determinant should be calculated
+    :return: the determinant of matrix
     """
-    if type(matrix) is not list or len(matrix) == 0:
-        raise TypeError("matrix must be a list of lists")
-    if all([type(i) is list for i in matrix]) is False:
-        raise TypeError("matrix must be a list of lists")
-    if matrix[0] and len(matrix) != len(matrix[0]):
-        raise ValueError("matrix must be a square matrix")
-    if matrix == [[]]:
+    if type(matrix) is not list or len(matrix) is 0:
+        raise TypeError('matrix must be a list of lists')
+    if not all(isinstance(row, list) for row in matrix):
+        raise TypeError('matrix must be a list of lists')
+    if len(matrix) is 1 and len(matrix[0]) is 0:
         return 1
-    if len(matrix) == 1:
+    if len(matrix) is not len(matrix[0]):
+        raise ValueError('matrix must be a square matrix')
+    if len(matrix) is 1 and len(matrix[0]) is 1:
         return matrix[0][0]
-    if len(matrix) == 2:
-        return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
-    det = 0
-    for j in range(len(matrix[0])):
-        omited_matrix = minor_m(matrix, 0, j)
-        det += matrix[0][j] * ((-1) ** j) * determinant(omited_matrix)
 
-    return det
+    if len(matrix) is 2 and len(matrix[0]) is 2:
+        det = matrix[0][0] * matrix[1][1] - matrix[1][0] * matrix[0][1]
+        return det
+
+    total = 0
+    for j in range(len(matrix)):
+        tmp = [x[:] for x in matrix]
+        tmp = tmp[1:]
+        height = len(tmp)
+
+        for i in range(height):
+            tmp[i] = tmp[i][0:j] + tmp[i][j+1:]
+        sign = (-1) ** (j % 2)
+        sub_det = determinant(tmp)
+        total += sign * matrix[0][j] * sub_det
+    return total
 
 
-def cofactor(matrix):
+def getMatrixMinor(m, i, j):
     """
-    Calculates the cofactor matrix of a matrix
-    :param matrix: list of lists whose cofactor matrix should be calculated
-    :return: cofactor matrix of matrix
+    :param m: matrix
+    :param i: x coord.
+    :param j: y coord.
+    :return: minor of the position
+    """
+    return determinant([row[:j] + row[j+1:] for row in (m[:i]+m[i+1:])])
+
+
+def minor(matrix):
+    """
+    Calculates the minor matrix of a matrix
+    :param matrix: list of lists whose minor matrix should be calculated
+    :return: minor matrix of matrix
     """
     if type(matrix) is not list or len(matrix) is 0:
         raise TypeError('matrix must be a list of lists')
@@ -52,8 +63,24 @@ def cofactor(matrix):
         raise ValueError('matrix must be a non-empty square matrix')
     if not all(len(matrix) == col for col in [len(row) for row in matrix]):
         raise ValueError('matrix must be a non-empty square matrix')
-    cofactors = minor(matrix)
+    if len(matrix) is 1 and len(matrix[0]) is 1:
+        return [[1]]
+    minors = [x[:] for x in matrix]
     for i in range(len(matrix)):
         for j in range(len(matrix[0])):
-            cofactors[i][j] *= (-1) ** (i+j)
-    return cofactors
+            minors[i][j] = getMatrixMinor(matrix, i, j)
+    return minors
+
+
+def cofactor(matrix):
+    """
+    * matrix is a list of lists whose cofactor matrix should be calculated
+    * Returns: the cofactor matrix of matrix
+    here the matrix 0x0 cant be realized
+    """
+    min_matrix = minor(matrix)
+    for i in range(len(min_matrix)):
+        for j in range(len(min_matrix[i])):
+            if (i + j) % 2 != 0:
+                min_matrix[i][j] = -1 * min_matrix[i][j]
+    return min_matrix
