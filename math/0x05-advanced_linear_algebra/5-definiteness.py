@@ -13,34 +13,30 @@ def definiteness(matrix):
     Returns:
         matrix definiteness
     """
-    if type(matrix) is not np.ndarray:
-        raise TypeError('matrix must be a numpy.ndarray')
-    if len(matrix.shape) != 2:
+    if not isinstance(matrix, np.ndarray):
+        raise TypeError("matrix must be a numpy.ndarray")
+    if len(matrix.shape) != 2 or (matrix.shape[0] != matrix.shape[1]):
         return None
-    n, m = matrix.shape
-    if n is not m:
+    if not np.all(matrix.T == matrix):
         return None
-    if not np.linalg.eig(matrix):
-        return None
-    if not (matrix.transpose() == matrix).all():
-        return None
+    eigenvalues, eigenvector = np.linalg.eig(matrix)
 
-    w, v = np.linalg.eig(matrix)
+    positive = np.where(eigenvalues > 0)
+    ceros = np.where(eigenvalues == 0)
+    negative = np.where(eigenvalues < 0)
 
-    pos, neg, zer = 0, 0, 0
-    for e_val in w:
-        if e_val > 0:
-            pos += 1
-        elif e_val < 0:
-            neg += 1
-        else:
-            zer += 1
-    if pos and not neg and not zer:
-        return 'Positive definite'
-    elif pos and not neg and zer:
-        return 'Positive semi-definite'
-    elif not pos and neg and not zer:
-        return 'Negative definite'
-    elif not pos and neg and zer:
-        return 'Negative semi-definite'
-    return 'Indefinite
+    pos = eigenvalues[positive]
+    cer = eigenvalues[ceros]
+    neg = eigenvalues[negative]
+    if pos.size and not cer.size and not neg.size:
+        return ('Positive definite')
+    elif pos.size and cer.size and not neg.size:
+        return ('Positive semi-definite')
+    elif not pos.size and not cer.size and neg.size:
+        return ('Negative definite')
+    elif not pos.size and cer.size and neg.size:
+        return ('Negative semi-definite')
+    elif pos.size and not cer.size and neg.size:
+        return ('Indefinite')
+    else:
+        return None
