@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 All layers should use a relu activation except for the last layer in
 the decoder, which should use sigmoid
