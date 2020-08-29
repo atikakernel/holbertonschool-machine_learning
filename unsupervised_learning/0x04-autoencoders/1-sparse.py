@@ -23,14 +23,16 @@ def sparse(input_dims, hidden_layers, latent_dims, lambtha):
         enco = K.layers.Dense(hidden_layers[i], activation='relu')(enco)
 
     llat = K.layers.Dense(latent_dims, activation='relu',
-                                activity_regularizer=regularizers.l1(lambtha))(encoded)
+                          activity_regularizer=regularizers.
+                          l1(lambtha))(encoded)
 
     encoder = K.models.Model(input_img, llat)
 
     input_dec = K.layers.Input(shape=(latent_dims,))
 
     deco = K.layers.Dense(hidden_layers[i], activation='relu',
-                             activity_regularizer=regularizers.l1(lambtha))(input_dec)
+                          activity_regularizer=regularizers.
+                          l1(lambtha))(input_dec)
 
     for i in range(nod-2, 0, -1):
         deco = K.layers.Dense(hidden_layers[i], activation='relu')(deco)
@@ -48,4 +50,3 @@ def sparse(input_dims, hidden_layers, latent_dims, lambtha):
     auto.compile(optimizer='Adam', loss='binary_crossentropy')
 
     return(encoder, decoder, auto)
-
